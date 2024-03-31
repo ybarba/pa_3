@@ -1,0 +1,71 @@
+---
+title: "README.qmd"
+format: gfm
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+data <- read.csv("/Users/diegomedina/Desktop/pa_3/data/vowel_data.csv") 
+
+```
+
+7.  Respond to the following questions:
+
+    a.  Examine the portion of the script you see below. In your own words what does this section do and why does it work? Demonstrate that you understand the code….
+
+        The first sentence establishes the starting point (vonset) of the two segments. The second sentence establishes the end point of the vector. Line number three calculates the duration of the vector by subtracting the results from the starting point from the end point.
+
+    b.  In a few short sentences describe the general outline of the script, what the purpose is, and how it achieves this purpose (hint: focus on the section dividers and the comments).
+
+        This script is aimed to process sound data and output information into a CSV file. It sets a loop in order to process each interval of the sound data. Within the loop, the script asks to read the sound and textgrid files, and calculate formants and spectral centroids (the results will be shown in the CSV file). The script also delineates sections and give some guidance to each block of code.
+
+    c.  In a few short sentences describe how the segmenting procedure you used this week differs from that used in `pa_2`. What are the advantages and disadvantages?
+
+        In terms of segmenting I did not find any difference, nonetheless, instead of getting mid-point values (pa2), in this one, we calculated duration at different points in a line (I guess it gives more accuracy to the analysis). We also labeled items by language.
+
+```{r}
+glimpse(data)
+```
+
+```{r}
+data %>%
+  group_by(id) %>%
+  summarize(avg_f1_cent = mean(f1_cent),
+            sd_f1_cent = sd(f1_cent),
+            avg_f2_cent = mean(f2_cent),
+            sd_f2_cent = sd(f2_cent),
+            avg_tl = mean(tl),
+            sd_tl = sd(tl))
+print(data) 
+```
+
+```{r}
+data %>%
+  ggplot(
+    aes(x = language, y = tl, fill = vowel)) +
+  geom_boxplot() +
+  labs(x = "Language", y = "Trajectory Length", fill = "Vowel") +
+ggtitle("Trajectory Length as a function of Vowel and Language")
+
+```
+
+```{r}
+data %>%
+  ggplot(
+    aes(x = language, y = f1_cent, fill = vowel)) +
+  geom_boxplot() +
+  labs(x = "Language", y = "Trajectory Length", fill = "Vowel") +
+ggtitle("F1 as a function of vowel and language")
+
+```
+
+```{r}
+data %>%
+  ggplot(
+    aes(x = language, y = f2_cent, fill = vowel)) +
+  geom_boxplot() +
+  labs(x = "Language", y = "Trajectory Length", fill = "Vowel") +
+ggtitle("F2 as a function of vowel and language")
+
+```
